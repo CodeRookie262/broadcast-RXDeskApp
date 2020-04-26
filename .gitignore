@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/package.json
 /package-lock.json
 
 # testing
@@ -13,12 +12,10 @@
 # production
 /build
 /dist
-/package.json
 /package-lock.json
 /dist-beta
 /dist-www
 /package-lock.json
-/package.json
 
 # misc
 .DS_Store

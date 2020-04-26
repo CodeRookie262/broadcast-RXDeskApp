@@ -1,7 +1,3 @@
-import { Modal } from 'antd';
-const { confirm } = Modal;
-const { shell } = window.electron;
-
 // 判断当前系统
 export function currentOs() {
   let agent = navigator.userAgent.toLowerCase();
@@ -16,22 +12,6 @@ export function currentOs() {
   }
 
   return os;
-}
-
-// 停止录制后视频保存弹窗
-export function successModal() {
-  confirm({
-    title: '保存成功',
-    icon: null,
-    centered: true,
-    content: '录制视频保存到电脑' + ' ' + localStorage.getItem('record_path'),
-    okText: '前往该文件目录',
-    cancelText: '关闭',
-    onOk: () => {
-      // 在文件管理器中显示给定的文件。
-      shell.showItemInFolder(localStorage.getItem('record_path'));
-    }
-  });
 }
 
 // 毫秒转换成时分秒，小于十补零
