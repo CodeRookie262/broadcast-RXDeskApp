@@ -1,0 +1,47 @@
+.setEquipmentModal {
+  text-align: center;
+  height: 600px;
+  .title {
+    span {
+      display: inline-block;
+      margin: 0 16px 20px;
+      font-family: PingFangSC-Medium;
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 24px;
+      letter-spacing: 0px;
+      color: #2e313c;
+    }
+    svg {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      vertical-align: text-bottom;
+    }
+  }
+  .content {
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: #495b70;
+    margin: 0 30px;
+  }
+  :global {
+    .ant-modal-close-x {
+      display: none;
+    }
+    .ant-modal-footer {
+      border-top: none;
+      button {
+        margin: 0 15px 20px;
+      }
+      button:first-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+.chatBox {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .messegeList {
+    padding: 17px;
+    height: calc(100% - 76px);
+    overflow: auto;
+
+    .publicStyle {
+      width: 100%;
+      height: auto;
+      display: flex;
+      margin-bottom: 20px;
+
+      .details {
+        flex: 1 0 auto;
+
+        .msgContent {
+          padding: 10px 14px;
+          border-radius: 8px;
+          max-width: 210px;
+          min-width: 70px;
+          min-height: 41px;
+          background-color: #f7f9fc;
+          word-wrap: break-word;
+        }
+      }
+
+      .avatar {
+        width: 32px;
+
+        svg {
+          width: 32px;
+          height: 32px;
+        }
+      }
+    }
+
+    .mainStyle {
+      .details {
+        .userMsg {
+          text-align: right;
+          margin-bottom: 7px;
+          margin-right: 8px;
+
+          span:first-child {
+            display: inline-block;
+            width: 50px;
+            height: 18px;
+            background-color: #0d6fde;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #ffffff;
+            text-align: center;
+          }
+          span:last-child {
+            font-size: 12px;
+            color: #aab1bd;
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+
+    .otherStyle {
+      .userMsg {
+        font-size: 12px;
+        color: #aab1bd;
+        margin-left: 8px;
+        margin-bottom: 8px;
+      }
+
+      .msgContent {
+        margin-left: 8px;
+      }
+    }
+  }
+
+  .messegeFooter {
+    width: 100%;
+    height: 75px;
+    border-top: 1px solid #e8e8e8;
+    padding: 14px;
+    display: flex;
+    position: absolute;
+    left: 0;
+    background: #fff;
+
+    .footerLeft {
+      flex: 1 0 auto;
+
+      :global {
+        .ant-input {
+          border: none;
+        }
+
+        .ant-input:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .footerRight {
+      height: 100%;
+      padding: 11px 0 0 13px;
+
+      .public {
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+      }
+
+      .icon {
+        margin-right: 16px;
+      }
+    }
+  }
+}

@@ -1,0 +1,262 @@
+.panel {
+  width: 100%;
+  height: 100%;
+  background-color: #f7f9fc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .noPlayDemo {
+    width: 266px !important;
+    height: 135px !important;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    background: #fafafa;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+
+    img {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      vertical-align: middle;
+    }
+
+    .btn {
+      position: absolute;
+      bottom: 1.3vh;
+      // left: 2vw;
+      border-radius: 16px;
+      opacity: 0.54;
+      z-index: 999;
+      background: #000000;
+      min-width: 120px;
+      padding: 5px 0;
+      border: none;
+      color: #8494a6;
+      cursor: pointer;
+      span {
+        width: 70px;
+        display: inline-block;
+      }
+      i {
+        margin-bottom: 2px;
+        color: #8494a6;
+        &:hover {
+          color: white;
+        }
+      }
+
+      .left-more {
+        margin-right: 5px;
+      }
+    }
+
+    .btn_click {
+      color: white;
+      opacity: 0.65;
+
+      i {
+        color: white;
+      }
+
+      .left-more {
+        fill: white;
+      }
+    }
+
+    .whiteboard-header {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      top: 3vh;
+      left: 0;
+      z-index: 999;
+      width: 100%;
+    }
+
+    .close-panel {
+      right: 0;
+      top: 0;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 22px solid transparent;
+      border-top-color: #000000;
+      border-right-color: #000000;
+      opacity: 0.29;
+      z-index: 999;
+
+      .icon-close {
+        font-size: 16px;
+        position: absolute;
+        top: -15px;
+        right: -18px;
+        color: white;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+    .close-panel-disable {
+      right: 0;
+      top: 0;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 22px solid transparent;
+      border-top-color: #000000;
+      border-right-color: #000000;
+      opacity: 0.29;
+      z-index: 999;
+
+      .icon-close {
+        font-size: 16px;
+        position: absolute;
+        top: -15px;
+        right: -18px;
+        color: white;
+        opacity: 0.5;
+      }
+    }
+    .whiteboard-room {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: #f1f3f4;
+      margin: 0;
+      padding: 0;
+      top: 0;
+      left: 0;
+
+      img {
+        vertical-align: middle;
+        width: 101.3%;
+        height: 101.2%;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    .drawer {
+      position: absolute;
+      text-align: center;
+      width: 200px;
+      z-index: 998;
+
+      .downPanel {
+        position: absolute;
+        bottom: -7px;
+        width: 100%;
+        padding: 10px 16px;
+        text-align: center;
+        left: 0;
+        background: none;
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    height: 11.5vh;
+    padding: 0.5vw 0.33vw;
+    color: white;
+    font-size: 14px;
+    width: 100%;
+
+    // padding: 10px 0;
+    .right-index {
+      width: 35px;
+    }
+
+    img {
+      width: 150px !important;
+      height: 100%;
+    }
+  }
+
+  :global {
+    .ant-drawer-header {
+      padding: 9px 16px;
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      z-index: 999;
+      height: 40px;
+      background: none;
+      border-bottom: unset;
+      border-bottom: none;
+      border: none;
+
+      .ant-drawer-title {
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+      }
+    }
+
+    .ant-drawer-content-wrapper {
+      opacity: 0.8;
+      width: 200px !important;
+      background: black;
+    }
+
+    .ant-drawer-wrapper-body {
+      overflow: hidden !important;
+      height: 94% !important;
+    }
+
+    .ant-drawer .ant-drawer-content {
+      width: 100%;
+      height: 100%;
+      background: #000000;
+    }
+
+    .ant-drawer-body {
+      margin-top: 37px;
+      padding: 0 !important;
+    }
+  }
+}
+.tipModal {
+  .modalContent {
+    .redTip {
+      font-size: 1.7em;
+      vertical-align: -0.29em;
+    }
+
+    span {
+      margin: 10px;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    p {
+      margin-left: 49px;
+    }
+  }
+  :global {
+    .ant-modal-footer {
+      border-top: none !important;
+    }
+  }
+}

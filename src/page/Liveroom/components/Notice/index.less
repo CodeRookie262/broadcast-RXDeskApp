@@ -1,0 +1,80 @@
+.noticePage {
+  width: 100%;
+  height: 100%;
+
+  .title {
+    height: 33px;
+    background-color: #f9f9fa;
+    color: #52a2fd;
+    padding: 6px 0 7px 14px;
+    .icon {
+      fill: #52a2fd;
+    }
+  }
+
+  .create {
+    width: 100%;
+    height: 100%;
+    padding: 14px 14px 0 14px;
+    box-sizing: border-box;
+
+    img {
+      width: 60px;
+      height: 62px;
+      margin-top: 50px;
+    }
+
+    .btn {
+      width: 84px;
+      margin-top: 30px;
+    }
+
+    .inputBox {
+      width: 100%;
+      height: 100%;
+      // display: flex;
+      // flex-direction: column;
+      position: relative;
+
+      .input {
+        flex: 1 0 auto;
+        position: relative;
+
+        .titleLen {
+          position: absolute;
+          right: 10px;
+          bottom: 3px;
+          font-size: 12px;
+          color: #bfc6d0;
+        }
+      }
+
+      :global {
+        .ant-input {
+          border: none;
+        }
+
+        .ant-input:focus {
+          border: none;
+          box-shadow: none;
+        }
+      }
+    }
+
+    .btnBox {
+      height: 60px;
+      width: 100%;
+      margin-top: 16px;
+      position: absolute;
+      left: 0;
+      bottom: 25px;
+      text-align: center;
+    }
+
+    // .editPage {
+    //   .notice {
+    //     height: 300px;
+    //   }
+    // }
+  }
+}

@@ -1,0 +1,21 @@
+pipeline {
+    agent {
+        docker {
+            image 'electronuserland/builder:wine'
+            args '-e "ELECTRON_CACHE=$HOME/.cache/electron"'
+            args '-e "ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder"'
+            args '-v ${PWD}:/project'
+            args '-v ${PWD##*/}-node-modules:/project/node_modules'
+            args '-v $HOME/.cache/electron:/root/.cache/electron'
+            args '-v $HOME/.cache/electron-builder:/root/.cache/electron-builder'
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install && npm run package'
+                sh 'ls -al'
+            }
+        }
+    }
+}

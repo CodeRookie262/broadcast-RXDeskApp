@@ -1,0 +1,203 @@
+.col {
+  // flex: 1;
+  float: left;
+  padding-left: 20px;
+  .icon-panel,
+  .icon-hover {
+    font-size: 22px;
+    cursor: pointer;
+    margin-right: 25px;
+    &:hover {
+      .icon-big {
+        fill: #0d6fde !important;
+      }
+      i {
+        color: #0d6fde;
+      }
+    }
+    i {
+      font-size: 14px;
+    }
+  }
+  .icon-hover {
+    &:hover {
+      fill: #0d6fde !important;
+      i {
+        color: #0d6fde;
+      }
+    }
+  }
+}
+.mySoundLine {
+  padding: 12px 0;
+}
+.menu_camera {
+  min-width: 120px;
+  li {
+    margin: 3px 20px 3px;
+    &:hover {
+      list-style: disc;
+      color: #0d6fde;
+    }
+  }
+}
+:global {
+  .ant-tabs-left-content {
+    padding-left: 0;
+  }
+  .ant-dropdown {
+    min-width: 25px !important;
+  }
+  .ant-dropdown-menu-item {
+    padding: 0 !important;
+    &:hover {
+      background-color: white !important;
+    }
+  }
+}
+
+// 切换视频源弹窗
+.source-modal {
+  :global {
+    .ant-modal-content {
+      height: 380px;
+    }
+
+    .ant-modal-body {
+      height: calc(100% - 55px);
+      padding: 0;
+    }
+
+    .ant-modal-header {
+      padding: 16px 24px 16px 47px;
+    }
+
+    .ant-modal-title {
+      font-size: 18px;
+    }
+
+    .ant-input {
+      border: none;
+      background-color: #f7f7f7;
+      border-radius: 16px;
+    }
+  }
+
+  .modal-line {
+    width: 1px;
+    height: 100%;
+    background-color: #e6e9ed;
+  }
+
+  .modal-camera {
+    width: 328px;
+
+    .list-child {
+      width: 224px;
+      padding: 6px 0 6px 15px;
+
+      span:first-child {
+        margin-right: 3px;
+      }
+
+      span:last-child {
+        display: inline-block;
+        max-width: 138px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        vertical-align: top;
+      }
+    }
+  }
+
+  .list {
+    height: 80%;
+    overflow-y: auto;
+    margin-top: 19px;
+
+    .list-child {
+      height: 35px;
+      border-radius: 4px;
+      border: solid 1px #ccd1d9;
+      margin-bottom: 10px;
+      color: #8494a6;
+      cursor: pointer;
+    }
+
+    .list-child:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  .modal-video {
+    width: 392px;
+
+    .list-child {
+      width: 289px;
+      display: flex;
+      padding: 0 15px;
+      line-height: 33px;
+
+      p:first-child {
+        flex: 6;
+        white-space: nowrap; // 禁止换行
+        overflow: hidden; // 隐藏溢出文本
+        text-overflow: ellipsis; // 超出部分显示...
+      }
+
+      p:last-child {
+        flex: 4;
+        text-align: right;
+      }
+    }
+  }
+
+  .modal-camera,
+  .modal-video {
+    height: 100%;
+    padding: 35px 47px 10px 47px;
+
+    > p {
+      font-size: 18px;
+      color: #041f40;
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+
+  .modal-box {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+:global {
+  .ant-modal-confirm .ant-modal-confirm-btns {
+    text-align: end;
+    float: none;
+  }
+}
+
+.import_modal {
+  padding: 0 26px;
+
+  > p {
+    width: 100%;
+    max-height: 45px;
+    overflow: hidden; // 隐藏溢出文本
+    text-overflow: ellipsis; // 超出部分显示...
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    -webkit-line-clamp: 2;
+    margin-bottom: 14px;
+  }
+}
+
+.demo-loading-container {
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
+  text-align: center;
+}

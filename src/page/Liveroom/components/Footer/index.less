@@ -1,0 +1,36 @@
+@import '../../../../variable.less';
+.panel {
+  text-align: center;
+  line-height: 75px;
+  > div {
+    display: inline-block;
+    &:first-child {
+      float: left;
+      padding-left: 20px;
+    }
+  }
+
+  .right {
+    float: right;
+
+    svg {
+      font-size: 22px;
+      margin-right: 25px;
+      cursor: pointer;
+      &:hover {
+        fill: @primary-color;
+      }
+    }
+  }
+  .icon-big {
+    font-size: 1.4vw;
+    margin-right: 40px;
+    cursor: pointer;
+  }
+}
+
+:global {
+  .ant-progress-circle .ant-progress-text {
+    color: @primary-color !important;
+  }
+}

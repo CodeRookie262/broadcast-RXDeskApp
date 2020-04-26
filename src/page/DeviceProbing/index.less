@@ -1,0 +1,65 @@
+.panel {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+
+  .img-panel {
+    width: 23%;
+    height: 20vh;
+    background-image: url('../../assets/img/probing@3x.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    left: 38.5%;
+    top: 34vh;
+  }
+  .btn-panel {
+    padding: 40px;
+    button {
+      float: right;
+      color: #8494a6;
+      &:hover {
+        color: #348feb;
+      }
+    }
+  }
+  .probing-panel {
+    position: absolute;
+    top: 56vh;
+    left: 38.5%;
+    width: 23%;
+    li {
+      list-style: disc;
+      padding-top: 5px;
+      font-family: PingFangSC-Regular;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    button {
+      width: 40%;
+      min-width: 85px;
+      left: 30%;
+      margin-top: 60px;
+    }
+    :global {
+      .ant-progress-inner {
+        border-radius: 16px;
+        height: 1.5vh;
+        min-height: 10px;
+      }
+      .ant-progress-bg {
+        height: 1.5vh !important;
+        min-height: 10px;
+      }
+      .ant-progress-outer {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .imgPanel {
+    background-image: url('../../assets/img/probing@2x.png') !important;
+  }
+}
