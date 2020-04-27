@@ -11,7 +11,7 @@ class RxReg extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabsKey: '0',
+      tabsKey: '1',
     };
   }
 

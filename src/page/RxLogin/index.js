@@ -12,7 +12,7 @@ class RxdLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabsKey: '0',
+      tabsKey: '1',
       percent: 0,
       visible: false,
       key: 'check',
@@ -20,7 +20,6 @@ class RxdLogin extends Component {
   }
 
   tabsChange = (key) => {
-    // console.log(key)
     this.setState({ tabsKey: key });
   };
 

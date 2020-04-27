@@ -18,11 +18,11 @@ class Captcha extends React.Component {
 
   componentDidMount() {
     // To disabled submit button at the beginning.
-    this.props.form.validateFields();
+    // this.props.form.validateFields();
   }
 
   // 自定义验证
-  comfirmRules = (rule, value, callback) => {
+  comfirmRules = (rule, value) => {
     const { status, codeBtn } = this.state;
     let phoneRules = /^1[3456789]\d{9}$/;
     let emailRules = /^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/;
@@ -33,9 +33,9 @@ class Captcha extends React.Component {
           (codeBtn === '获取验证码' || codeBtn === '重新获取')
         ) {
           this.setState({ getCodeBtn: false, status: 1 });
-          callback();
+          return Promise.resolve();
         } else {
-          callback();
+          return Promise.resolve();
         }
       } else {
         if (
@@ -43,14 +43,14 @@ class Captcha extends React.Component {
           (codeBtn === '获取验证码' || codeBtn === '重新获取')
         ) {
           this.setState({ getCodeBtn: true, status: 0 });
-          callback('请输入正确格式的手机号或邮箱');
+          return Promise.reject('请输入正确格式的手机号或邮箱');
         } else {
-          callback('请输入正确格式的手机号或邮箱');
+          return Promise.reject('请输入正确格式的手机号或邮箱');
         }
       }
     } else {
       this.setState({ getCodeBtn: true });
-      callback('手机号或邮箱不能为空');
+      return Promise.reject('手机号或邮箱不能为空');
     }
   };
 
@@ -93,19 +93,31 @@ class Captcha extends React.Component {
     e.preventDefault();
     let phoneRules = /^1[3456789]\d{9}$/;
     let emailRules = /^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/;
-    this.props.form.validateFields(['username'], (err, values) => {
+
+    this.refs.loginCaptcha.validateFields(['username']).then((values) => {
       // console.log(values);
-      if (!err) {
-        // 判断是手机号还是邮箱
-        if (phoneRules.test(values.username)) {
-          //手机号
-          this.forCode({ send_type: 6, phone: values.username });
-        } else if (emailRules.test(values.username)) {
-          //邮箱
-          this.forCode({ send_type: 5, email: values.username });
-        }
+      // 判断是手机号还是邮箱
+      if (phoneRules.test(values.username)) {
+        //手机号
+        this.forCode({ send_type: 6, phone: values.username });
+      } else if (emailRules.test(values.username)) {
+        //邮箱
+        this.forCode({ send_type: 5, email: values.username });
       }
     });
+    // this.refs.loginCaptcha.validateFields(['username'], (err, values) => {
+    //   // console.log(values);
+    //   if (!err) {
+    //     // 判断是手机号还是邮箱
+    //     if (phoneRules.test(values.username)) {
+    //       //手机号
+    //       this.forCode({ send_type: 6, phone: values.username });
+    //     } else if (emailRules.test(values.username)) {
+    //       //邮箱
+    //       this.forCode({ send_type: 5, email: values.username });
+    //     }
+    //   }
+    // });
   };
 
   // 弹窗
@@ -157,16 +169,12 @@ class Captcha extends React.Component {
 
   // 登录
   handleSubmit = (e) => {
-    // const { ipcRenderer } = window.electron;
-    // ipcRenderer.send('update');
-    e.preventDefault();
     let phoneRules = /^1[3456789]\d{9}$/;
     let emailRules = /^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/;
-
-    this.props.form.validateFields((err, values) => {
-      // console.log(values);
-      if (!err) {
-        // 判断是手机号还是邮箱
+    this.refs.loginCaptcha
+      .validateFields(['username', 'VerificationCode'])
+      .then((values) => {
+        console.log(values, '个大胜靠德');
         if (phoneRules.test(values.username)) {
           //手机号
           this.loginRequest({
@@ -182,8 +190,36 @@ class Captcha extends React.Component {
             email: values.username,
           });
         }
-      }
-    });
+      })
+      .catch((e) => console.log('fail', e));
+    return;
+    // const { ipcRenderer } = window.electron;
+    // ipcRenderer.send('update');
+    // e.preventDefault();
+    // let phoneRules = /^1[3456789]\d{9}$/;
+    // let emailRules = /^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/;
+
+    // this.props.form.validateFields((err, values) => {
+    //   // console.log(values);
+    //   if (!err) {
+    //     // 判断是手机号还是邮箱
+    //     if (phoneRules.test(values.username)) {
+    //       //手机号
+    //       this.loginRequest({
+    //         // room_id: values.roomid,
+    //         captcha: values.VerificationCode,
+    //         phone: values.username,
+    //       });
+    //     } else if (emailRules.test(values.username)) {
+    //       //邮箱
+    //       this.loginRequest({
+    //         // room_id: values.roomid,
+    //         captcha: values.VerificationCode,
+    //         email: values.username,
+    //       });
+    //     }
+    //   }
+    // });
   };
 
   // 组件卸载时清理定时器等
@@ -192,94 +228,81 @@ class Captcha extends React.Component {
   }
 
   // 校验错误
-  hasErrors = (fieldsError) => {
-    return Object.keys(fieldsError).some((field) => fieldsError[field]);
+  // 校验错误
+  hasErrors = (_, allFields) => {
+    // console.log(
+    //   allFields,
+    //   'allFields',
+    //   allFields.some((field) => field.errors.length > 0 || !field.value)
+    // );
+    this.setState({
+      loginBtn: allFields.some(
+        (field) => field.errors.length > 0 || !field.value
+      ),
+    });
   };
-
   onChange = () => {
     this.setState({ loginBtn: false });
   };
 
   render() {
-    const {
-      getFieldDecorator,
-      getFieldsError,
-      getFieldError,
-      isFieldTouched,
-    } = this.props.form;
+    // const {
+    //   getFieldDecorator,
+    //   getFieldsError,
+    //   getFieldError,
+    //   isFieldTouched,
+    // } = this.props.form;
     const { getCodeBtn, codeBtn, loginBtn } = this.state;
     const { loadingCaptcha, loadingLogin } = this.props.login;
 
     // Only show error after a field is touched.
     // const roomidError = isFieldTouched('roomid') && getFieldError('roomid');
-    const usernameError =
-      isFieldTouched('username') && getFieldError('username');
-    const codeError =
-      isFieldTouched('VerificationCode') && getFieldError('VerificationCode');
+    // const usernameError =
+    //   isFieldTouched('username') && getFieldError('username');
+    // const codeError =
+    //   isFieldTouched('VerificationCode') && getFieldError('VerificationCode');
 
     return (
-      <Form onSubmit={this.handleSubmit} style={{ maxWidth: 364 }}>
-        {/* <Form.Item
-          validateStatus={roomidError ? 'error' : ''}
-          help={roomidError || ''}
-        >
-          {getFieldDecorator('roomid', {
-            rules: [
-              { required: true, message: '直播房间号不能为空' },
-              {
-                pattern: /^[0-9]{6}$/,
-                message: '直播房间号须为6位数字组成',
-              },
-            ],
-          })(
-            <Input
-              placeholder="请输入直播房间号"
-              size="large"
-              maxLength={6}
-              onChange={this.onChange}
-            />
-          )}
-        </Form.Item> */}
+      <Form
+        ref="loginCaptcha"
+        onFinish={this.handleSubmit}
+        onFieldsChange={this.hasErrors}
+        style={{ maxWidth: 364 }}
+      >
         <Form.Item
-          validateStatus={usernameError ? 'error' : ''}
-          help={usernameError || ''}
+          name="username"
+          // validateStatus={usernameError ? 'error' : ''}
+          // help={usernameError || ''}
+          rules={[
+            {
+              validator: this.comfirmRules,
+            },
+          ]}
         >
-          {getFieldDecorator('username', {
-            rules: [
-              {
-                validator: this.comfirmRules,
-              },
-            ],
-          })(
-            <Input
-              placeholder="请输入手机号或邮箱"
-              size="large"
-              onChange={this.onChange}
-            />
-          )}
+          <Input
+            placeholder="请输入手机号或邮箱"
+            size="large"
+            onChange={this.onChange}
+          />
         </Form.Item>
         <Form.Item
-          validateStatus={codeError ? 'error' : ''}
-          help={codeError || ''}
+          name="VerificationCode"
+          rules={[
+            { required: true, message: '验证码不能为空' },
+            {
+              pattern: /^[0-9]{4}$/,
+              message: '验证码须为四位数字组成',
+            },
+          ]}
         >
           <Row gutter={8}>
             <Col span={15}>
-              {getFieldDecorator('VerificationCode', {
-                rules: [
-                  { required: true, message: '验证码不能为空' },
-                  {
-                    pattern: /^[0-9]{4}$/,
-                    message: '验证码须为四位数字组成',
-                  },
-                ],
-              })(
-                <Input
-                  size="large"
-                  placeholder="请输入验证码"
-                  maxLength={4}
-                  onChange={this.onChange}
-                />
-              )}
+              <Input
+                size="large"
+                placeholder="请输入验证码"
+                maxLength={4}
+                onChange={this.onChange}
+              />
             </Col>
             <Col span={9} style={{ textAlign: 'right' }}>
               <Button
@@ -310,7 +333,8 @@ class Captcha extends React.Component {
             style={{ width: '100%' }}
             size="large"
             loading={loadingLogin}
-            disabled={loginBtn ? loginBtn : this.hasErrors(getFieldsError())}
+            disabled={loginBtn}
+            // disabled={loginBtn ? loginBtn : this.hasErrors(getFieldsError())}
           >
             登录
           </Button>

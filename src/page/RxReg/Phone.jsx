@@ -37,7 +37,7 @@ class PhoneReg extends Component {
   componentDidMount() {
     if (this.props.history.location.state) {
       if (/^\d{1,}$/.test(this.props.history.location.state.username)) {
-        const { setFieldsValue } = this.props.form;
+        const { setFieldsValue } = this.refs.reg;
         setFieldsValue({
           phone: this.props.history.location.state.username,
         });
@@ -50,7 +50,8 @@ class PhoneReg extends Component {
   forCode = (obj) => {
     // 发送请求
     this.setState({ getCodeBtn: true });
-    return console.log('请求验证码:', obj);
+    console.log('请求验证码咯');
+    // return console.log('请求验证码:', obj);
     this.props.dispatch({
       type: 'user/getCaptcha',
       payload: obj,
@@ -104,11 +105,11 @@ class PhoneReg extends Component {
 
     e.preventDefault();
     // 手机验证码
-    this.props.form.validateFields(['phone'], (err, values) => {
+    this.refs.regPhone.validateFields(['phone']).then((values) => {
       console.log(values);
-      if (!err) {
-        this.forCode({ send_type: 3, phone: values.phone });
-      }
+      // if (!err) {
+      this.forCode({ send_type: 3, phone: values.phone });
+      // }
     });
   };
 
@@ -182,11 +183,14 @@ class PhoneReg extends Component {
 
   // 点击注册
   handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     //手机注册
-    this.props.form.validateFields((err, values) => {
-      // console.log(values, 'hhh');
-      if (!err) {
+    console.log(this.refs.regPhone);
+    this.refs.regPhone
+      .validateFields(['VerificationCode', 'phone', 'password'])
+      .then((values) => {
+        // console.log(values, 'hhh');
+        // if (!err) {
         this.regRequest({
           phone: values.phone,
           password: values.password,
@@ -194,43 +198,33 @@ class PhoneReg extends Component {
           captcha: values.VerificationCode,
           bind: false,
         });
-      }
-    });
+        // }
+      });
   };
 
   // 手机号自定义验证
-  phoneRules = (rule, value, callback) => {
+  phoneRules = (rule, value) => {
     const { key, codeBtn } = this.state;
     let reg = new RegExp(/^1[3456789]\d{9}$/);
     if (value) {
       if (reg.test(value)) {
         if (key === 0 && (codeBtn === '获取验证码' || codeBtn === '重新获取')) {
           this.setState({ getCodeBtn: false, key: 1 });
-          callback();
+          return Promise.resolve();
         } else {
-          callback();
+          return Promise.resolve();
         }
       } else {
         if (key === 1 && (codeBtn === '获取验证码' || codeBtn === '重新获取')) {
           this.setState({ getCodeBtn: true, key: 0 });
-          callback('请输入正确格式的手机号码');
+          return Promise.reject('请输入正确格式的手机号码');
         } else {
-          callback('请输入正确格式的手机号码');
+          return Promise.reject('请输入正确格式的手机号码');
         }
       }
     } else {
       this.setState({ getCodeBtn: true });
-      callback('手机号码不能为空');
-    }
-  };
-
-  // 确认密码自定义校验
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('两次密码输入不一致');
-    } else {
-      callback();
+      return Promise.reject('手机号码不能为空');
     }
   };
 
@@ -241,46 +235,41 @@ class PhoneReg extends Component {
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    // const { getFieldDecorator } = this.refs.regPhone;
     const { getCodeBtn, codeBtn, isChecked } = this.state;
     const { loadingCaptcha, loadingRegister } = this.props.user;
 
-    const prefixSelector = getFieldDecorator('prefix', {})(<span>+86</span>);
+    const prefixSelector = <span>+86</span>;
 
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item>
-          {getFieldDecorator('phone', {
-            rules: [
-              {
-                validator: this.phoneRules,
-              },
-            ],
-          })(
-            <AutoComplete size="large">
-              <Input
-                addonBefore={prefixSelector}
-                placeholder="请输入手机号码"
-              />
-            </AutoComplete>
-          )}
+      <Form ref="regPhone" onFinish={this.handleSubmit} className="login-form">
+        <Form.Item
+          name="phone"
+          rules={[
+            {
+              validator: this.phoneRules,
+            },
+          ]}
+        >
+          <AutoComplete size="large">
+            <Input addonBefore={prefixSelector} placeholder="请输入手机号码" />
+          </AutoComplete>
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          name="VerificationCode"
+          rules={[
+            { required: true, message: '验证码不能为空' },
+            {
+              pattern: /\d{4}/,
+              message: '请输入正确格式的验证码',
+            },
+          ]}
+        >
           <Row gutter={8}>
             <Col span={15}>
-              {getFieldDecorator('VerificationCode', {
-                rules: [
-                  { required: true, message: '验证码不能为空' },
-                  {
-                    pattern: /\d{4}/,
-                    message: '请输入正确格式的验证码',
-                  },
-                ],
-              })(
-                <AutoComplete size="large" placeholder="请输入验证码">
-                  <Input maxLength={4} />
-                </AutoComplete>
-              )}
+              <AutoComplete size="large" placeholder="请输入验证码">
+                <Input maxLength={4} />
+              </AutoComplete>
             </Col>
             <Col span={9} style={{ textAlign: 'right' }}>
               <Button
@@ -296,39 +285,21 @@ class PhoneReg extends Component {
             </Col>
           </Row>
         </Form.Item>
-        <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [
-              { required: true, message: '密码不能为空' },
-              {
-                pattern: /^[a-zA-Z0-9!@#\$%\^&\*_\+-=,\.\/?;:`"~'\\\(\)\{\}\[\]<>]{6,16}$/,
-                message:
-                  '密码为数字、大小写字母或特殊符号组成，长度为 6 至 16 位',
-              },
-            ],
-          })(
-            <AutoComplete placeholder="请输入密码" size="large">
-              <Input.Password />
-            </AutoComplete>
-          )}
+        <Form.Item
+          name="password"
+          rules={[
+            { required: true, message: '密码不能为空' },
+            {
+              pattern: /^[a-zA-Z0-9!@#\$%\^&\*_\+-=,\.\/?;:`"~'\\\(\)\{\}\[\]<>]{6,16}$/,
+              message:
+                '密码为数字、大小写字母或特殊符号组成，长度为 6 至 16 位',
+            },
+          ]}
+        >
+          <AutoComplete placeholder="请输入密码" size="large">
+            <Input.Password />
+          </AutoComplete>
         </Form.Item>
-        {/* <Form.Item>
-          {getFieldDecorator('confirm', {
-            rules: [
-              {
-                required: true,
-                message: '确认密码不能为空',
-              },
-              {
-                validator: this.compareToFirstPassword,
-              },
-            ],
-          })(
-            <AutoComplete placeholder="请输入确认密码" size="large">
-              <Input.Password />
-            </AutoComplete>
-          )}
-        </Form.Item> */}
         <Row gutter={8} style={{ marginBottom: 20, fontSize: 14 }}>
           <Col span={24} className={styles.notice}>
             <Checkbox onChange={this.CheckboxChange} defaultChecked={isChecked}>

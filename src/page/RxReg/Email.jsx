@@ -34,7 +34,7 @@ class EmailReg extends Component {
   componentDidMount() {
     if (this.props.history.location.state) {
       if (!/^\d{1,}$/.test(this.props.history.location.state.username)) {
-        const { setFieldsValue } = this.props.form;
+        const { setFieldsValue } = this.refs.regEmail;
         setFieldsValue({
           email: this.props.history.location.state.username,
         });
@@ -86,11 +86,11 @@ class EmailReg extends Component {
   getCode = (e) => {
     e.preventDefault();
 
-    this.props.form.validateFields(['email'], (err, values) => {
+    this.refs.regEmail.validateFields(['email']).then((values) => {
       console.log(values);
-      if (!err) {
-        this.forCode({ send_type: 1, email: values.email });
-      }
+      // if (!err) {
+      this.forCode({ send_type: 1, email: values.email });
+      // }
     });
   };
 
@@ -166,99 +166,81 @@ class EmailReg extends Component {
 
   // 点击注册
   handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     //邮箱注册
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.regRequest({
-          email: values.email,
-          password: values.password,
-          // confirm_password: values.confirm,
-          captcha: values.VerificationCode,
-          bind: false,
-        });
-      }
+    this.refs.regEmail.validateFields().then((values) => {
+      // if (!err) {
+      this.regRequest({
+        email: values.email,
+        password: values.password,
+        // confirm_password: values.confirm,
+        captcha: values.VerificationCode,
+        bind: false,
+      });
+      // }
     });
   };
 
   // 邮箱自定义验证
-  emailRules = (rule, value, callback) => {
+  emailRules = (rule, value) => {
     const { key, codeBtn } = this.state;
     let reg = /^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?$/;
     if (value) {
       if (reg.test(value)) {
         if (key === 0 && (codeBtn === '获取验证码' || codeBtn === '重新获取')) {
           this.setState({ getCodeBtn: false, key: 1 });
-          callback();
+          return Promise.resolve();
         } else {
-          callback();
+          return Promise.resolve();
         }
       } else {
         if (key === 1 && (codeBtn === '获取验证码' || codeBtn === '重新获取')) {
           this.setState({ getCodeBtn: true, key: 0 });
-          callback('请输入正确格式的邮箱');
+          return Promise.reject('请输入正确格式的邮箱');
         } else {
-          callback('请输入正确格式的邮箱');
+          return Promise.reject('请输入正确格式的邮箱');
         }
       }
     } else {
       this.setState({ getCodeBtn: true });
-      callback('邮箱不能为空');
+      return Promise.reject('邮箱不能为空');
     }
   };
-
-  // 确认密码自定义校验
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('两次密码输入不一致');
-    } else {
-      callback();
-    }
-  };
-
-  // 组件卸载时清理定时器等
-  // componentWillUnmount() {
-  //   this.timeOuter && clearTimeout(this.timeOuter);
-  //   this.timer && clearInterval(this.timer);
-  // }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this;
     const { getCodeBtn, codeBtn, isChecked } = this.state;
     const { loadingCaptcha, loadingRegister } = this.props.user;
 
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item>
-          {getFieldDecorator('email', {
-            rules: [
-              {
-                validator: this.emailRules,
-              },
-            ],
-          })(
-            <AutoComplete size="large" placeholder="请输入邮箱">
-              <Input />
-            </AutoComplete>
-          )}
+      <Form ref="regEmail" onFinish={this.handleSubmit} className="login-form">
+        <Form.Item
+          name="email"
+          rules={[
+            {
+              validator: this.emailRules,
+            },
+          ]}
+        >
+          <AutoComplete size="large" placeholder="请输入邮箱">
+            <Input />
+          </AutoComplete>
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          name="VerificationCode"
+          rules={[
+            { required: true, message: '验证码不能为空' },
+            {
+              pattern: /\d{4}/,
+              message: '请输入正确格式的验证码',
+            },
+          ]}
+        >
           <Row gutter={8}>
             <Col span={15}>
-              {getFieldDecorator('VerificationCode', {
-                rules: [
-                  { required: true, message: '验证码不能为空' },
-                  {
-                    pattern: /\d{4}/,
-                    message: '请输入正确格式的验证码',
-                  },
-                ],
-              })(
-                <AutoComplete size="large" placeholder="请输入验证码">
-                  <Input maxLength={4} />
-                </AutoComplete>
-              )}
+              <AutoComplete size="large" placeholder="请输入验证码">
+                <Input maxLength={4} />
+              </AutoComplete>
             </Col>
             <Col span={9} style={{ textAlign: 'right' }}>
               <Button
@@ -274,21 +256,20 @@ class EmailReg extends Component {
             </Col>
           </Row>
         </Form.Item>
-        <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [
-              { required: true, message: '密码不能为空' },
-              {
-                pattern: /^[a-zA-Z0-9!@#\$%\^&\*_\+-=,\.\/?;:`"~'\\\(\)\{\}\[\]<>]{6,16}$/,
-                message:
-                  '密码为数字，大写字母，小写字母，或特殊符号组成，长度为6至16位',
-              },
-            ],
-          })(
-            <AutoComplete placeholder="请输入密码" size="large">
-              <Input.Password />
-            </AutoComplete>
-          )}
+        <Form.Item
+          name="password"
+          rules={[
+            { required: true, message: '密码不能为空' },
+            {
+              pattern: /^[a-zA-Z0-9!@#\$%\^&\*_\+-=,\.\/?;:`"~'\\\(\)\{\}\[\]<>]{6,16}$/,
+              message:
+                '密码为数字，大写字母，小写字母，或特殊符号组成，长度为6至16位',
+            },
+          ]}
+        >
+          <AutoComplete placeholder="请输入密码" size="large">
+            <Input.Password />
+          </AutoComplete>
         </Form.Item>
         <Row gutter={8} style={{ marginBottom: 20, fontSize: 14 }}>
           <Col span={24} className={styles.notice}>
@@ -311,23 +292,6 @@ class EmailReg extends Component {
             <Link to="/user/login">去登录</Link>
           </Col> */}
         </Row>
-        {/* <Form.Item>
-          {getFieldDecorator('confirm', {
-            rules: [
-              {
-                required: true,
-                message: '确认密码不能为空',
-              },
-              {
-                validator: this.compareToFirstPassword,
-              },
-            ],
-          })(
-            <AutoComplete placeholder="请输入确认密码" size="large">
-              <Input.Password />
-            </AutoComplete>
-          )}
-        </Form.Item> */}
         <Form.Item>
           <Button
             type="primary"

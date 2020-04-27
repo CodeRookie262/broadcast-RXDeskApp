@@ -15,8 +15,6 @@ class Password extends React.Component {
   }
 
   componentDidMount() {
-    // To disabled submit button at the beginning.
-    this.refs.loginPassword.validateFields();
     console.log(this.props, 'haha');
   }
 
@@ -106,7 +104,7 @@ class Password extends React.Component {
         }
       })
       .catch((e) => console.log('fail', e));
-
+    return;
     this.refs.loginPassword.validateFields((err, values) => {
       // console.log(values);
       if (!err) {
@@ -132,11 +130,11 @@ class Password extends React.Component {
 
   // 校验错误
   hasErrors = (_, allFields) => {
-    console.log(
-      allFields,
-      'allFields',
-      allFields.some((field) => field.errors.length > 0 || !field.value)
-    );
+    // console.log(
+    //   allFields,
+    //   'allFields',
+    //   allFields.some((field) => field.errors.length > 0 || !field.value)
+    // );
     this.setState({
       loginBtn: allFields.some(
         (field) => field.errors.length > 0 || !field.value
