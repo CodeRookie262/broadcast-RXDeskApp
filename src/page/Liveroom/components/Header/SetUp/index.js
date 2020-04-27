@@ -9,7 +9,7 @@ import {
   Slider,
   Radio,
   Progress,
-  Button
+  Button,
 } from 'antd';
 import Iconfont from '@/components/Iconfont';
 import { connect } from 'dva';
@@ -37,16 +37,16 @@ class SetUp extends PureComponent {
       deviceList_microphone: null,
       // deviceList_camera: null,
       showCanvas: false,
-      save_path: null
+      save_path: null,
     };
   }
 
   //关闭弹窗
-  handleCancel = e => {
+  handleCancel = (e) => {
     const { videoVisible, offVideo } = this.props;
     this.setState({
       SetEquipmentModal: false,
-      showCanvas: false
+      showCanvas: false,
     });
     if (!videoVisible || offVideo) {
       zego.stopPreview();
@@ -66,14 +66,14 @@ class SetUp extends PureComponent {
         audio_input_device_list: zego.getAudioDeviceList(0),
         audio_output_device_list: zego.getAudioDeviceList(1),
         video_device_list: zego.getVideoList(),
-        modalKey: (key && key) || '1'
+        modalKey: (key && key) || '1',
       },
       () => {
         const {
           audio_input_device_list,
           audio_output_device_list,
           deviceList_sound,
-          deviceList_microphone
+          deviceList_microphone,
         } = this.state;
         let output_id = '';
         let input_id = '';
@@ -90,14 +90,14 @@ class SetUp extends PureComponent {
         this.setState({
           SetEquipmentModal: true,
           audio_output_device_volume: zego.getSpeakerDeviceVolume(output_id),
-          audio_input_device_volume: zego.getMicDeviceVolume(input_id)
+          audio_input_device_volume: zego.getMicDeviceVolume(input_id),
         });
         this.getCanvasId('1');
       }
     );
   }
   // form表单验证并提交
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -111,7 +111,7 @@ class SetUp extends PureComponent {
       deviceList_sound,
       deviceList_microphone,
       audio_input_device_list,
-      audio_output_device_list
+      audio_output_device_list,
     } = this.state;
     let device_id = '';
     if (key === 'sound') {
@@ -123,7 +123,7 @@ class SetUp extends PureComponent {
         : '';
       await zego.setSpeakerDeviceVolume(device_id, value);
       this.setState({
-        audio_output_device_volume: zego.getSpeakerDeviceVolume(device_id)
+        audio_output_device_volume: zego.getSpeakerDeviceVolume(device_id),
       });
     } else if (key === 'microphone') {
       device_id = deviceList_microphone
@@ -133,7 +133,7 @@ class SetUp extends PureComponent {
         : '';
       await zego.setMicDeviceVolume(device_id, value);
       this.setState({
-        audio_input_device_volume: zego.getMicDeviceVolume(device_id)
+        audio_input_device_volume: zego.getMicDeviceVolume(device_id),
       });
     }
   }
@@ -145,21 +145,21 @@ class SetUp extends PureComponent {
   async onDeviceConditionChange(key, device_id) {
     if (key === 'sound') {
       this.setState({
-        deviceList_sound: device_id
+        deviceList_sound: device_id,
       });
       await zego.setAudioDevice(key, device_id);
       let volume = await zego.getSpeakerDeviceVolume(device_id);
       this.setState({
-        audio_output_device_volume: volume
+        audio_output_device_volume: volume,
       });
     } else if (key === 'microphone') {
       this.setState({
-        deviceList_microphone: device_id
+        deviceList_microphone: device_id,
       });
       await zego.setAudioDevice(key, device_id);
       let volume = await zego.getSpeakerDeviceVolume(device_id);
       this.setState({
-        audio_input_device_volume: volume
+        audio_input_device_volume: volume,
       });
     }
   }
@@ -176,8 +176,8 @@ class SetUp extends PureComponent {
       this.props.dispatch({
         type: 'common/current_camera',
         payload: {
-          device_id
-        }
+          device_id,
+        },
       });
       localStorage.setItem('camera_id', device_id);
 
@@ -207,8 +207,8 @@ class SetUp extends PureComponent {
           this.props.dispatch({
             type: 'common/current_camera',
             payload: {
-              device_id
-            }
+              device_id,
+            },
           });
           zego.selectVideoDevice(device_id);
           zego.preview(canvas_id);
@@ -264,7 +264,7 @@ class SetUp extends PureComponent {
     let res = dialog.showOpenDialog({
       defaultPath: this.state.save_path,
       buttonLabel: '选择',
-      properties: ['openDirectory']
+      properties: ['openDirectory'],
     });
     // console.log('res====', res);
     if (res !== undefined) {
@@ -277,7 +277,7 @@ class SetUp extends PureComponent {
   render() {
     const {
       form: { getFieldDecorator },
-      liveDetail
+      liveDetail,
     } = this.props;
     const {
       SetEquipmentModal,
@@ -288,7 +288,7 @@ class SetUp extends PureComponent {
       showCanvas,
       audio_output_device_volume,
       audio_input_device_volume,
-      save_path
+      save_path,
     } = this.state;
     let video_default_vlaue = '2';
     let video_default_width =
@@ -342,7 +342,7 @@ class SetUp extends PureComponent {
                       className={styles.none}
                       style={
                         (!liveDetail.room_poster && {
-                          background: '#f4f4f4'
+                          background: '#f4f4f4',
                         }) ||
                         {}
                       }
@@ -371,7 +371,7 @@ class SetUp extends PureComponent {
                         ? video_device_list[0].device_id
                         : ''
                     }
-                    onChange={id => this.cameraDeviceChange(id)}
+                    onChange={(id) => this.cameraDeviceChange(id)}
                     style={{ width: '77%' }}
                   >
                     {video_device_list !== [] &&
@@ -410,7 +410,7 @@ class SetUp extends PureComponent {
                         ? audio_input_device_list[0].device_id
                         : ''
                     }
-                    onChange={id =>
+                    onChange={(id) =>
                       this.onDeviceConditionChange('microphone', id)
                     }
                   >
@@ -485,7 +485,7 @@ class SetUp extends PureComponent {
                         ? audio_output_device_list[0].device_id
                         : ''
                     }
-                    onChange={id => this.onDeviceConditionChange('sound', id)}
+                    onChange={(id) => this.onDeviceConditionChange('sound', id)}
                   >
                     {audio_output_device_list !== [] &&
                       audio_output_device_list.map((item, index) => (
@@ -534,7 +534,7 @@ class SetUp extends PureComponent {
                     style={{
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      wordWrap: 'break-word'
+                      wordWrap: 'break-word',
                     }}
                   >
                     {save_path}
@@ -554,9 +554,9 @@ class SetUp extends PureComponent {
     );
   }
 }
-const SetUpForm = Form.create({ name: 'SetUp' })(SetUp);
+// const SetUpForm = Form.create({ name: 'SetUp' })(SetUp);
 export default connect(({ doc, live, common }) => ({
   ...doc,
   ...live,
-  ...common
-}))(SetUpForm);
+  ...common,
+}))(SetUp);

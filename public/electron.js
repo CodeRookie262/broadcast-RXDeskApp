@@ -4,7 +4,7 @@ const {
   BrowserWindow,
   ipcMain,
   powerSaveBlocker,
-  Menu
+  Menu,
 } = require('electron');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
@@ -21,13 +21,13 @@ console.log(powerSaveBlocker.isStarted(id));
 // 接入sentry
 const Sentry = require('@sentry/electron');
 Sentry.init({
-  dsn: 'https://6d63ad87b3d34e05903c4d5f6f67ff3b@sentry.io/1761892'
+  dsn: 'https://6d63ad87b3d34e05903c4d5f6f67ff3b@sentry.io/1761892',
 });
 // autoUpdater.logger = log;
 // autoUpdater.logger.transports.file.level = 'info';
 // log.info('App starting...');
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'http://localhost:55197';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -41,7 +41,7 @@ function createWindow(externalDisplay) {
     sentry_url = url.format({
       pathname: path.join(__dirname, 'sentry.js'),
       protocol: 'file:',
-      slashes: false
+      slashes: false,
     });
   }
   let template = [
@@ -53,9 +53,9 @@ function createWindow(externalDisplay) {
           accelerator: 'Command+Q',
           click: function() {
             app.quit();
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: '编辑',
@@ -63,24 +63,24 @@ function createWindow(externalDisplay) {
         {
           label: '剪切',
           accelerator: 'CmdOrCtrl+X',
-          role: 'cut'
+          role: 'cut',
         },
         {
           label: '复制',
           accelerator: 'CmdOrCtrl+C',
-          role: 'copy'
+          role: 'copy',
         },
         {
           label: '粘贴',
           accelerator: 'CmdOrCtrl+V',
-          role: 'paste'
+          role: 'paste',
         },
         {
           label: '选择全部',
           accelerator: 'CmdOrCtrl+A',
-          role: 'selectall'
-        }
-      ]
+          role: 'selectall',
+        },
+      ],
     },
     {
       label: '视图',
@@ -90,7 +90,7 @@ function createWindow(externalDisplay) {
           accelerator: 'CmdOrCtrl+R',
           click: function(item, focusedWindow) {
             if (focusedWindow) focusedWindow.reload();
-          }
+          },
         },
         {
           label: '开发调试工具',
@@ -100,9 +100,9 @@ function createWindow(externalDisplay) {
           })(),
           click: function(item, focusedWindow) {
             if (focusedWindow) focusedWindow.toggleDevTools();
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       label: '窗口',
@@ -111,14 +111,14 @@ function createWindow(externalDisplay) {
         {
           label: '最小化',
           accelerator: 'CmdOrCtrl+M',
-          role: 'minimize'
+          role: 'minimize',
         },
         {
           label: '关闭',
           accelerator: 'CmdOrCtrl+W',
-          role: 'close'
-        }
-      ]
+          role: 'close',
+        },
+      ],
     },
     {
       label: '帮助',
@@ -130,10 +130,10 @@ function createWindow(externalDisplay) {
             require('electron').shell.openExternal(
               'http://help.yingliboke.cn/'
             );
-          }
-        }
-      ]
-    }
+          },
+        },
+      ],
+    },
   ];
 
   //注册菜单
@@ -152,10 +152,10 @@ function createWindow(externalDisplay) {
     titleBarStyle: 'hidden',
     webPreferences: {
       nodeIntegration: true, // 是否集成 Nodejs
-      preload: sentry_url
+      preload: sentry_url,
       // devTools: true
     },
-    show: false
+    show: false,
   });
 
   // 开发环境，加载localhost:8000。生产环境加载build/index.html
@@ -167,7 +167,7 @@ function createWindow(externalDisplay) {
     startUrl = url.format({
       pathname: path.join(__dirname, '/../build/index.html'),
       protocol: 'file:',
-      slashes: false
+      slashes: false,
     });
   }
   mainWindow.loadURL(startUrl);
@@ -182,7 +182,7 @@ function createWindow(externalDisplay) {
   });
 
   // Emitted when the window is closed.
-  mainWindow.on('close', e => {
+  mainWindow.on('close', (e) => {
     mainWindow = null;
     app.exit();
     // e.preventDefault();
@@ -200,7 +200,7 @@ function createWindow(externalDisplay) {
         pathname: path.join(__dirname, '/../build/index.html'),
         protocol: 'file:',
         slashes: false,
-        hash
+        hash,
       });
       mainWindow.loadURL(startUrl);
     }
@@ -236,7 +236,7 @@ ipcMain.on('login', () => {
     x: 0,
     y: 0,
     width: 1280,
-    height: 720
+    height: 720,
   });
 
   // 将窗口移动到屏幕中央。
@@ -266,8 +266,8 @@ function createNewWindow(value) {
         titleBarStyle: 'hidden',
         // parent: mainWindow,
         webPreferences: {
-          nodeIntegration: true //设置此处
-        }
+          nodeIntegration: true, //设置此处
+        },
       });
 
       let startUrl;
@@ -278,7 +278,7 @@ function createNewWindow(value) {
           pathname: path.join(__dirname, '/../build/index.html'),
           protocol: 'file:',
           slashes: false,
-          hash
+          hash,
         });
       }
       win[hash].loadURL(startUrl);
@@ -300,8 +300,8 @@ function createNewWindow(value) {
       titleBarStyle: 'hidden',
       // parent: mainWindow,
       webPreferences: {
-        nodeIntegration: true //设置此处
-      }
+        nodeIntegration: true, //设置此处
+      },
     });
 
     let startUrl;
@@ -312,7 +312,7 @@ function createNewWindow(value) {
         pathname: path.join(__dirname, '/../build/index.html'),
         protocol: 'file:',
         slashes: false,
-        hash
+        hash,
       });
     }
 
@@ -363,12 +363,12 @@ ipcMain.on('update', (e, arg) => {
   checkForUpdates(false);
 });
 // 检测更新，在你想要检查更新的时候执行，renderer事件触发后的操作自行编写
-let checkForUpdates = key => {
+let checkForUpdates = (key) => {
   const message = {
     error: '检查更新出错',
     checking: '正在检查更新……',
     updateAva: '检测到新版本，正在下载……',
-    updateNotAva: '现在使用的就是最新版本，不用更新'
+    updateNotAva: '现在使用的就是最新版本，不用更新',
   };
   // 清除每次更新下载的文件，否则无法进行更新
   let updaterCacheDirName = 'broadClass-updater1';
@@ -492,7 +492,7 @@ function startupEventHandle() {
       );
       var target = path.basename(process.execPath);
       var child = cp.spawn(updateDotExe, ['--removeShortcut', target], {
-        detached: true
+        detached: true,
       });
       child.on('close', function(code) {
         app.quit();

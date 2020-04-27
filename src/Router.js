@@ -12,13 +12,16 @@ import WhiteBoard from './page/WhiteBoard';
 import DeviceProbing from './page/DeviceProbing';
 import Chat from './page/Liveroom/components/Questions/Chat';
 
+import RxLogin from './page/RxLogin';
+import RxReg from './page/RxReg';
 moment.locale('zh-cn');
 
 export default function AppRouter() {
   return (
     <ConfigProvider locale={zhCN}>
       <HashRouter hashType="noslash">
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" component={RxLogin || Login} />
+        <Route exact path="/reg" component={RxReg} />
         <Route path="/livelist" component={LiveList} />
         <Route path="/liveroom" component={Liveroom} />
         <Route path="/whiteboard" component={WhiteBoard} />

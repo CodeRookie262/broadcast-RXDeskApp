@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Link } from 'react-router-dom';
 import { Button, Form, Input, Row, Col, Modal, Icon } from 'antd';
+import styles from './index.less';
 
 class Captcha extends React.Component {
   constructor(props) {
@@ -125,6 +127,7 @@ class Captcha extends React.Component {
   };
 
   loginRequest = (json) => {
+    return console.log('验证码登录:', json);
     this.props.dispatch({
       type: 'login/login',
       payload: json,
@@ -167,14 +170,14 @@ class Captcha extends React.Component {
         if (phoneRules.test(values.username)) {
           //手机号
           this.loginRequest({
-            room_id: values.roomid,
+            // room_id: values.roomid,
             captcha: values.VerificationCode,
             phone: values.username,
           });
         } else if (emailRules.test(values.username)) {
           //邮箱
           this.loginRequest({
-            room_id: values.roomid,
+            // room_id: values.roomid,
             captcha: values.VerificationCode,
             email: values.username,
           });
@@ -208,7 +211,7 @@ class Captcha extends React.Component {
     const { loadingCaptcha, loadingLogin } = this.props.login;
 
     // Only show error after a field is touched.
-    const roomidError = isFieldTouched('roomid') && getFieldError('roomid');
+    // const roomidError = isFieldTouched('roomid') && getFieldError('roomid');
     const usernameError =
       isFieldTouched('username') && getFieldError('username');
     const codeError =
@@ -216,7 +219,7 @@ class Captcha extends React.Component {
 
     return (
       <Form onSubmit={this.handleSubmit} style={{ maxWidth: 364 }}>
-        <Form.Item
+        {/* <Form.Item
           validateStatus={roomidError ? 'error' : ''}
           help={roomidError || ''}
         >
@@ -236,7 +239,7 @@ class Captcha extends React.Component {
               onChange={this.onChange}
             />
           )}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           validateStatus={usernameError ? 'error' : ''}
           help={usernameError || ''}
@@ -292,6 +295,14 @@ class Captcha extends React.Component {
             </Col>
           </Row>
         </Form.Item>
+        <div className={styles.f_nav}>
+          <span>
+            <Link to="/reg">快速注册</Link>
+          </span>
+          <span>
+            <Link to="/reg">忘记密码</Link>
+          </span>
+        </div>
         <Form.Item>
           <Button
             type="primary"
